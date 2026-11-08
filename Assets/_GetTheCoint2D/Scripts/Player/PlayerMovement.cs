@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,9 +8,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _MovementSpeed = 10f;
     [SerializeField] float _Accleration = 40f;
     [SerializeField] float _JumpValue = 3f;
+    [SerializeField] float _MinMovementBound = -8.5f;
+    [SerializeField] float _MaxMovementBound = 8.5f;
 
     [Header("Jump Check")]
     [SerializeField] float _GroundCheckDistance = .1f;
+    [SerializeField] Vector2 _GroundCheckSize = new Vector2(1f, .1f);
     [SerializeField] bool _JumpRequested;
     [SerializeField] Transform _GroundCheckPoint;
     [SerializeField] LayerMask _GroundLayer;
@@ -43,6 +47,17 @@ public class PlayerMovement : MonoBehaviour
 
         Jump();
 
+        ClampPosition();
+
+    }
+
+    private void ClampPosition()
+    {
+        Vector2 _PlayerClampPosition = _RB.position;
+
+        _PlayerClampPosition.x = Mathf.Clamp(_PlayerClampPosition.x, _MinMovementBound, _MaxMovementBound);
+
+        _RB.position = _PlayerClampPosition;
     }
 
     void Movement()
@@ -58,9 +73,18 @@ public class PlayerMovement : MonoBehaviour
 
     void GroundCheck()
     {
-        _GroundCheck = Physics2D.Raycast(_GroundCheckPoint.position, Vector2.down, _GroundCheckDistance, _GroundLayer);
-        
-        Debug.DrawRay(_GroundCheckPoint.position, new Vector2(0,-_GroundCheckDistance), Color.red);
+        _GroundCheck = Physics2D.BoxCast(_GroundCheckPoint.position, _GroundCheckSize, 0f, Vector2.down,_GroundCheckDistance,_GroundLayer);
+
+        //_GroundCheck = Physics2D.Raycast(_GroundCheckPoint.position, Vector2.down, _GroundCheckDistance, _GroundLayer);
+        //Debug.DrawRay(_GroundCheckPoint.position, new Vector2(0,-_GroundCheckDistance), Color.red);
+    }
+
+    void OnDrawGizmos()
+    {
+        if(_GroundCheckPoint == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(_GroundCheckPoint.position + (Vector3.down * _GroundCheckDistance), _GroundCheckSize);
     }
 
     void Jump()
