@@ -22,6 +22,12 @@ public class CollectablePooling : MonoBehaviour, IPool
         for (int i = 0; i < COIN_AMOUNT; ++i)
         {
             GameObject _Coin = Instantiate(_CoinPrefab, SpawnBounds(), Quaternion.identity, transform);
+
+            if(_Coin.TryGetComponent(out Coin _CoinScript))
+            {
+                _CoinScript.SetPool(this);
+            }
+
             _Coin.SetActive(false);
             _Coins.Enqueue(_Coin);
         }
@@ -44,12 +50,21 @@ public class CollectablePooling : MonoBehaviour, IPool
         if(_Coins.Count > 0)
         {
             GameObject _Coin = _Coins.Dequeue();
+
+            _Coin.transform.position = SpawnBounds();
+
             _Coin.SetActive(true);
             return _Coin;
         }
         else
         {
             GameObject _NewCoin = Instantiate(_CoinPrefab, SpawnBounds(), Quaternion.identity, transform);
+
+            if(_NewCoin.TryGetComponent(out Coin _CoinScript))
+            {
+                _CoinScript.SetPool(this);
+            }
+
             _NewCoin.SetActive(true);
             return _NewCoin;
         }
@@ -57,10 +72,12 @@ public class CollectablePooling : MonoBehaviour, IPool
 
     public void ReturnToPool(GameObject _Coin)
     {
-        if(_Coin != null)
+        if(_Coin != null && _Coin.activeSelf)
         {
             _Coin.SetActive(false);
-            _Coins.Enqueue(_Coin);    
+
+            if(!_Coins.Contains(_Coin))
+                _Coins.Enqueue(_Coin);
         }
     }
 
