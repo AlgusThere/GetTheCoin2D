@@ -4,6 +4,13 @@ public class Coin : MonoBehaviour, ICollectable
 {
     [SerializeField] CollectableItemsSO _CollectableItemSO;
 
+    IPool _IPool;
+
+    public void SetPool(IPool IPool)
+    {
+        _IPool = IPool;
+    }
+
     public void Collectable()
     {
         EventManager.CoinCollected(_CollectableItemSO._AMOUNT);
@@ -14,7 +21,7 @@ public class Coin : MonoBehaviour, ICollectable
         if(collision.CompareTag("Player"))
         {
             Collectable();
-            Destroy(gameObject);
+            _IPool?.ReturnToPool(gameObject);
         }
     }
 
