@@ -4,6 +4,7 @@ public static class EventManager
 {
     public static event Action<int> _CoinCollected;
     public static event Action<int> _UpdateScoreText;
+    public static event Action<float> _UpdateTimerText;
 
     public static void CoinCollected(int _Amount)
     {
@@ -13,5 +14,10 @@ public static class EventManager
     public static void UpdateScoreText(int _Amount)
     {
         _UpdateScoreText?.Invoke(_Amount);
+    }
+
+    public static void UpdateTimerText(float _Amount)
+    {
+        _UpdateTimerText?.Invoke(_Amount);
     }
 }
