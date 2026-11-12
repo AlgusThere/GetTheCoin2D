@@ -13,72 +13,61 @@ public class CollectablePooling : MonoBehaviour, IPool
     
     Queue<GameObject> _Coins;
 
+    WaitForSeconds _SpawnWait;
+
     void Start()
     {
         _Collider2DBounds = GetComponent<Collider2D>();
 
-        _Coins = new Queue<GameObject>();
+        _SpawnWait = new WaitForSeconds(_SpawnCoolDown);
 
-        for (int i = 0; i < COIN_AMOUNT; ++i)
-        {
-            GameObject _Coin = Instantiate(_CoinPrefab, SpawnBounds(), Quaternion.identity, transform);
+        _Coins = new Queue<GameObject>(COIN_AMOUNT);
 
-            if(_Coin.TryGetComponent(out Coin _CoinScript))
-            {
-                _CoinScript.SetPool(this);
-            }
-
-            _Coin.SetActive(false);
-            _Coins.Enqueue(_Coin);
-        }
+        for (int i = 0; i < COIN_AMOUNT; i++)
+            _Coins.Enqueue(CreateCoin());
 
         StartCoroutine(SpawnCoinNumerator());
+    }
+
+    GameObject CreateCoin()
+    {
+        GameObject _Coin = Instantiate(_CoinPrefab, SpawnBounds(), Quaternion.identity, transform);
+
+        if (_Coin.TryGetComponent(out Coin _CoinScript))
+        {
+            _CoinScript.SetPool(this);
+        }
+
+        _Coin.SetActive(false);
+        return _Coin;
     }
 
     Vector2 SpawnBounds()
     {
         Bounds _Bounds = _Collider2DBounds.bounds;
 
-        float _xRandom = Random.Range(_Bounds.min.x, _Bounds.max.x);
-        float _yRandom = Random.Range(_Bounds.min.y, _Bounds.max.y);
-
-        return new Vector2(_xRandom,_yRandom);
+        return new Vector2(
+            Random.Range(_Bounds.min.x,_Bounds.max.x),
+            Random.Range(_Bounds.min.y,_Bounds.max.y));
     }
 
     public GameObject GetCoinFromPool()
     {
-        if(_Coins.Count > 0)
-        {
-            GameObject _Coin = _Coins.Dequeue();
+        if (_Coins.Count == 0) return null;
 
-            _Coin.transform.position = SpawnBounds();
-
-            _Coin.SetActive(true);
-            return _Coin;
-        }
-        else
-        {
-            GameObject _NewCoin = Instantiate(_CoinPrefab, SpawnBounds(), Quaternion.identity, transform);
-
-            if(_NewCoin.TryGetComponent(out Coin _CoinScript))
-            {
-                _CoinScript.SetPool(this);
-            }
-
-            _NewCoin.SetActive(true);
-            return _NewCoin;
-        }
+        GameObject _Coin = _Coins.Dequeue();
+        _Coin.transform.position = SpawnBounds();
+        _Coin.SetActive(true);
+        return _Coin;
     }
 
     public void ReturnToPool(GameObject _Coin)
     {
-        if(_Coin != null && _Coin.activeSelf)
-        {
-            _Coin.SetActive(false);
+        if(_Coin == null || !_Coin.activeSelf)
+            return;
 
-            if(!_Coins.Contains(_Coin))
-                _Coins.Enqueue(_Coin);
-        }
+        _Coin.SetActive(false);
+        _Coins.Enqueue(_Coin);
     }
 
 
@@ -86,17 +75,8 @@ public class CollectablePooling : MonoBehaviour, IPool
     {
         while(true)
         {
-            GameObject _Coin = GetCoinFromPool();
-
-            if(_Coin != null)
-            {
-                yield return new WaitForSeconds(_SpawnCoolDown);
-                ReturnToPool(_Coin);   
-            }
-            else
-            {
-                yield return null;
-            }
+            GetCoinFromPool();
+            yield return _SpawnWait;
         }
 
     }

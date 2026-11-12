@@ -22,9 +22,8 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            Debug.Log("Süren Bitti :(");
+            EventManager.UpdateGameOverPanel(true);
+            Time.timeScale = 0f;
         }
-
-        
     }
 }
