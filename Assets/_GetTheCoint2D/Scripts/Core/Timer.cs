@@ -7,6 +7,9 @@ public class Timer : MonoBehaviour
 
     float _RemainingTime = 20f;
 
+    void OnEnable() => EventManager._TimerIncreaseAction += TimerIncreaser;
+    void OnDisable() => EventManager._TimerIncreaseAction -= TimerIncreaser;
+
     void Update()
     {
         UpdateTimer();
@@ -25,5 +28,12 @@ public class Timer : MonoBehaviour
             EventManager.UpdateGameOverPanel(true);
             Time.timeScale = 0f;
         }
+    }
+
+    void TimerIncreaser(float _Amount)
+    {
+        _RemainingTime += _Amount;
+
+        EventManager.UpdateTimerText(_RemainingTime);
     }
 }

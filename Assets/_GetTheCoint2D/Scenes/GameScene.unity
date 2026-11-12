@@ -1020,6 +1020,11 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!61 &802038313 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 90431271966134557, guid: 25a08947ba968e74e9aad94b6a1fcd9f, type: 3}
+  m_PrefabInstance: {fileID: 7611810371589059877}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &998311710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,6 +1383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1632372571}
   - component: {fileID: 1632372570}
+  - component: {fileID: 1632372572}
   m_Layer: 0
   m_Name: TIMER
   m_TagString: Untagged
@@ -1412,6 +1418,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1632372572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632372569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2302b82fc453045bc5484bcecc691b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TimerIncreaserManager
+  _Collider2DBounds: {fileID: 802038313}
+  _IncreaserPrefab: {fileID: 3746024037200960318, guid: 5c3ce5d5aa1c2404c915090071dfc7f5, type: 3}
+  _CoolDown: 10
+  _LifeTime: 2
 --- !u!1 &1835971118
 GameObject:
   m_ObjectHideFlags: 0
@@ -2166,10 +2188,6 @@ PrefabInstance:
     - target: {fileID: 1859496360320502596, guid: 25a08947ba968e74e9aad94b6a1fcd9f, type: 3}
       propertyPath: m_Name
       value: COLLECTABLE SPAWNER
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582640541068227646, guid: 25a08947ba968e74e9aad94b6a1fcd9f, type: 3}
-      propertyPath: _SpawnCoolDown
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

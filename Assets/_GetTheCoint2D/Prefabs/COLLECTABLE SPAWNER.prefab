@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectablePooling
   _CoinPrefab: {fileID: 3567008019988022064, guid: 1782910b52cd1b946b5ddb32787e6064, type: 3}
-  _SpawnCoolDown: 2
+  _SpawnCoolDown: 1
 --- !u!61 &90431271966134557
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ public static class EventManager
     public static event Action<int> _CoinCollected;
     public static event Action<int> _UpdateScoreText;
     public static event Action<float> _UpdateTimerText;
+    public static event Action<float> _TimerIncreaseAction;
 
     public static event Action<bool> _GameOverPanel;
 
@@ -22,6 +23,8 @@ public static class EventManager
     {
         _UpdateTimerText?.Invoke(_Amount);
     }
+
+    public static void IncreaseTimerMethod(float _Amount) => _TimerIncreaseAction?.Invoke(_Amount);
 
     public static void UpdateGameOverPanel(bool _Booler) => _GameOverPanel?.Invoke(_Booler);
 }
