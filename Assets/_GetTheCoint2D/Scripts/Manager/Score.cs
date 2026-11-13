@@ -25,4 +25,14 @@ public class Score : MonoBehaviour
         _Score += _Amount;
         EventManager.UpdateScoreText(_Score);
     }
+
+    public void CheckScore(float _Amount)
+    {
+        if(_Score >= 100)
+        {
+            EventManager.IncreaseJumpHeight(_Amount);
+            _Score -= 100;
+            EventManager.UpdateScoreText(_Score);
+        }
+    }
 }

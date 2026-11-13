@@ -17,12 +17,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool _JumpRequested;
     [SerializeField] Transform _GroundCheckPoint;
     [SerializeField] LayerMask _GroundLayer;
-
     InputAction _MoveAction;
     InputAction _JumpAction;
     Vector2 _MovementInput;
     Rigidbody2D _RB;
     RaycastHit2D _GroundCheck;
+
+    void OnEnable() => EventManager._IncreaseJumpHeight += IncreaseJumpHeight;
+    void OnDisable() => EventManager._IncreaseJumpHeight -= IncreaseJumpHeight;
 
     void Start()
     {
@@ -95,5 +97,10 @@ public class PlayerMovement : MonoBehaviour
                 _RB.AddForce(Vector2.up * _JumpValue, ForceMode2D.Impulse);
         }
         _JumpRequested = false;
+    }
+
+    public void IncreaseJumpHeight(float _Amount)
+    {
+        _JumpValue += _Amount;
     }
 }

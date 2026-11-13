@@ -10,6 +10,11 @@ public class Timer : MonoBehaviour
     void OnEnable() => EventManager._TimerIncreaseAction += TimerIncreaser;
     void OnDisable() => EventManager._TimerIncreaseAction -= TimerIncreaser;
 
+    void Start()
+    {
+        Time.timeScale = 1f;
+    }
+
     void Update()
     {
         UpdateTimer();
